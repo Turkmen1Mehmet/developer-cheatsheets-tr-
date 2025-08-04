@@ -2,6 +2,8 @@
 
 Bu rehber SQL'in temel ve ileri seviye konularını kapsar. Her komutun Türkçe açıklaması bulunmaktadır.
 
+**Not:** Bu rehberde MySQL ve SQLite komutları ayrı ayrı belirtilmiştir. Her bölümde önce MySQL komutları, sonra SQLite komutları verilmiştir.
+
 ## İçindekiler
 
 1. [Veritabanı İşlemleri](#1-veritabanı-işlemleri)
@@ -90,27 +92,64 @@ Bu rehber SQL'in temel ve ileri seviye konularını kapsar. Her komutun Türkçe
 ## 1. Veritabanı İşlemleri
 
 ### Veritabanı Oluşturma
+
+**MySQL:**
 ```sql
 CREATE DATABASE veritabani_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da veritabanı dosyası otomatik oluşturulur
+-- Veritabanına bağlanmak yeterlidir
+```
+
 **Açıklama:** Yeni bir veritabanı oluşturur
 
 ### Veritabanı Silme
+
+**MySQL:**
 ```sql
 DROP DATABASE veritabani_adi;
 ```
+
+**SQLite:**
+```bash
+# Dosyayı silmek yeterlidir
+rm veritabani_adi.db
+```
+
 **Açıklama:** Veritabanını ve içindeki tüm verileri siler
 
 ### Veritabanı Kullanma
+
+**MySQL:**
 ```sql
 USE veritabani_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da tek veritabanı kullanılır, USE komutu yoktur
+-- Bağlantı sırasında veritabanı dosyası belirtilir
+```
+
 **Açıklama:** Belirtilen veritabanını aktif hale getirir
 
 ### Veritabanlarını Listeleme
+
+**MySQL:**
 ```sql
 SHOW DATABASES;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da tek veritabanı kullanılır
+-- .databases komutu ile mevcut veritabanlarını görebilirsiniz
+.databases
+```
+
 **Açıklama:** Mevcut tüm veritabanlarını listeler
 
 ---
@@ -118,6 +157,8 @@ SHOW DATABASES;
 ## 2. Tablo İşlemleri
 
 ### Tablo Oluşturma
+
+**MySQL:**
 ```sql
 CREATE TABLE tablo_adi (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -128,56 +169,143 @@ CREATE TABLE tablo_adi (
     kayit_tarihi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
+**SQLite:**
+```sql
+CREATE TABLE tablo_adi (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ad TEXT NOT NULL,
+    soyad TEXT,
+    yas INTEGER,
+    email TEXT UNIQUE,
+    kayit_tarihi DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 **Açıklama:** Yeni bir tablo oluşturur ve sütunları tanımlar
 
 ### Tablo Silme
+
+**MySQL:**
 ```sql
 DROP TABLE tablo_adi;
 ```
+
+**SQLite:**
+```sql
+DROP TABLE tablo_adi;
+```
+
 **Açıklama:** Tabloyu ve içindeki tüm verileri siler
 
 ### Tablo Yapısını Görüntüleme
+
+**MySQL:**
 ```sql
 DESCRIBE tablo_adi;
 -- veya
 DESC tablo_adi;
 ```
+
+**SQLite:**
+```sql
+PRAGMA table_info(tablo_adi);
+-- veya
+.schema tablo_adi
+```
+
 **Açıklama:** Tablonun sütun yapısını ve veri tiplerini gösterir
 
 ### Tabloları Listeleme
+
+**MySQL:**
 ```sql
 SHOW TABLES;
 ```
+
+**SQLite:**
+```sql
+SELECT name FROM sqlite_master WHERE type='table';
+-- veya
+.tables
+```
+
 **Açıklama:** Mevcut veritabanındaki tüm tabloları listeler
 
 ### Tablo Adını Değiştirme
+
+**MySQL:**
 ```sql
 RENAME TABLE eski_adi TO yeni_adi;
 ```
+
+**SQLite:**
+```sql
+ALTER TABLE eski_adi RENAME TO yeni_adi;
+```
+
 **Açıklama:** Tablo adını değiştirir
 
 ### Sütun Ekleme
+
+**MySQL:**
 ```sql
 ALTER TABLE tablo_adi ADD COLUMN yeni_sutun VARCHAR(50);
 ```
+
+**SQLite:**
+```sql
+ALTER TABLE tablo_adi ADD COLUMN yeni_sutun TEXT;
+```
+
 **Açıklama:** Mevcut tabloya yeni sütun ekler
 
 ### Sütun Silme
+
+**MySQL:**
 ```sql
 ALTER TABLE tablo_adi DROP COLUMN sutun_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da sütun silme desteklenmez
+-- Yeni tablo oluşturup veriyi taşımak gerekir
+CREATE TABLE yeni_tablo AS SELECT id, ad, soyad FROM eski_tablo;
+DROP TABLE eski_tablo;
+ALTER TABLE yeni_tablo RENAME TO eski_tablo;
+```
+
 **Açıklama:** Tablodan sütun siler
 
 ### Sütun Değiştirme
+
+**MySQL:**
 ```sql
 ALTER TABLE tablo_adi MODIFY COLUMN sutun_adi VARCHAR(100);
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da sütun değiştirme desteklenmez
+-- Yeni tablo oluşturup veriyi taşımak gerekir
+```
+
 **Açıklama:** Sütunun veri tipini değiştirir
 
 ### Sütun Adını Değiştirme
+
+**MySQL:**
 ```sql
 ALTER TABLE tablo_adi CHANGE eski_adi yeni_adi VARCHAR(50);
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da sütun adı değiştirme desteklenmez
+-- Yeni tablo oluşturup veriyi taşımak gerekir
+```
+
 **Açıklama:** Sütun adını değiştirir
 
 ---
@@ -185,62 +313,144 @@ ALTER TABLE tablo_adi CHANGE eski_adi yeni_adi VARCHAR(50);
 ## 3. Veri İşlemleri (CRUD)
 
 ### VERİ EKLEME (CREATE)
+
+**MySQL:**
 ```sql
 INSERT INTO tablo_adi (sutun1, sutun2, sutun3) VALUES (deger1, deger2, deger3);
 INSERT INTO tablo_adi VALUES (deger1, deger2, deger3);
 ```
+
+**SQLite:**
+```sql
+INSERT INTO tablo_adi (sutun1, sutun2, sutun3) VALUES (deger1, deger2, deger3);
+INSERT INTO tablo_adi VALUES (deger1, deger2, deger3);
+```
+
 **Açıklama:** Tabloya yeni veri ekler
 
 ### Çoklu Veri Ekleme
+
+**MySQL:**
 ```sql
 INSERT INTO tablo_adi (sutun1, sutun2) VALUES 
     (deger1, deger2),
     (deger3, deger4),
     (deger5, deger6);
 ```
+
+**SQLite:**
+```sql
+INSERT INTO tablo_adi (sutun1, sutun2) VALUES 
+    (deger1, deger2),
+    (deger3, deger4),
+    (deger5, deger6);
+```
+
 **Açıklama:** Birden fazla veriyi tek seferde ekler
 
 ### VERİ OKUMA (READ)
+
+**MySQL:**
 ```sql
 SELECT * FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT * FROM tablo_adi;
+```
+
 **Açıklama:** Tablodaki tüm verileri getirir
 
+**MySQL:**
 ```sql
 SELECT sutun1, sutun2 FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT sutun1, sutun2 FROM tablo_adi;
+```
+
 **Açıklama:** Belirtilen sütunları getirir
 
+**MySQL:**
 ```sql
 SELECT DISTINCT sutun1 FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT DISTINCT sutun1 FROM tablo_adi;
+```
+
 **Açıklama:** Tekrarlayan değerleri filtreleyerek getirir
 
 ### VERİ GÜNCELLEME (UPDATE)
+
+**MySQL:**
 ```sql
 UPDATE tablo_adi SET sutun1 = yeni_deger WHERE kosul;
 ```
+
+**SQLite:**
+```sql
+UPDATE tablo_adi SET sutun1 = yeni_deger WHERE kosul;
+```
+
 **Açıklama:** Koşula uyan verileri günceller
 
+**MySQL:**
 ```sql
 UPDATE tablo_adi SET sutun1 = yeni_deger1, sutun2 = yeni_deger2 WHERE kosul;
 ```
+
+**SQLite:**
+```sql
+UPDATE tablo_adi SET sutun1 = yeni_deger1, sutun2 = yeni_deger2 WHERE kosul;
+```
+
 **Açıklama:** Birden fazla sütunu günceller
 
 ### VERİ SİLME (DELETE)
+
+**MySQL:**
 ```sql
 DELETE FROM tablo_adi WHERE kosul;
 ```
+
+**SQLite:**
+```sql
+DELETE FROM tablo_adi WHERE kosul;
+```
+
 **Açıklama:** Koşula uyan verileri siler
 
+**MySQL:**
 ```sql
 DELETE FROM tablo_adi;
 ```
-**Açıklama:** Tablodaki tüm verileri siler (TRUNCATE daha hızlıdır)
 
+**SQLite:**
+```sql
+DELETE FROM tablo_adi;
+```
+
+**Açıklama:** Tablodaki tüm verileri siler
+
+**MySQL:**
 ```sql
 TRUNCATE TABLE tablo_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da TRUNCATE yoktur, DELETE kullanılır
+DELETE FROM tablo_adi;
+-- Veya tabloyu yeniden oluştur
+DELETE FROM sqlite_sequence WHERE name='tablo_adi';
+```
+
 **Açıklama:** Tablodaki tüm verileri hızlıca siler
 
 ---
@@ -366,21 +576,45 @@ SELECT * FROM tablo_adi ORDER BY sutun1 ASC, sutun2 DESC;
 **Açıklama:** Birden fazla sütuna göre sıralama yapar
 
 ### Limit
+
+**MySQL:**
 ```sql
 SELECT * FROM tablo_adi LIMIT 10;
 ```
+
+**SQLite:**
+```sql
+SELECT * FROM tablo_adi LIMIT 10;
+```
+
 **Açıklama:** İlk 10 kaydı getirir
 
 ### Offset ile Limit
+
+**MySQL:**
 ```sql
 SELECT * FROM tablo_adi LIMIT 10 OFFSET 20;
 ```
+
+**SQLite:**
+```sql
+SELECT * FROM tablo_adi LIMIT 10 OFFSET 20;
+```
+
 **Açıklama:** 20. kayıttan sonraki 10 kaydı getirir (sayfalama için)
 
 ### Kısa Yazım
+
+**MySQL:**
 ```sql
 SELECT * FROM tablo_adi LIMIT 20, 10;
 ```
+
+**SQLite:**
+```sql
+SELECT * FROM tablo_adi LIMIT 20, 10;
+```
+
 **Açıklama:** Yukarıdaki ile aynı (offset, limit)
 
 ---
@@ -388,6 +622,8 @@ SELECT * FROM tablo_adi LIMIT 20, 10;
 ## 6. Fonksiyonlar
 
 ### Metin Fonksiyonları
+
+**MySQL:**
 ```sql
 SELECT UPPER(sutun) FROM tablo_adi;
 SELECT LOWER(sutun) FROM tablo_adi;
@@ -396,6 +632,17 @@ SELECT CONCAT(sutun1, ' ', sutun2) FROM tablo_adi;
 SELECT SUBSTRING(sutun, 1, 5) FROM tablo_adi;
 SELECT TRIM(sutun) FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT UPPER(sutun) FROM tablo_adi;
+SELECT LOWER(sutun) FROM tablo_adi;
+SELECT LENGTH(sutun) FROM tablo_adi;
+SELECT sutun1 || ' ' || sutun2 FROM tablo_adi; -- CONCAT yerine ||
+SELECT SUBSTR(sutun, 1, 5) FROM tablo_adi; -- SUBSTRING yerine SUBSTR
+SELECT TRIM(sutun) FROM tablo_adi;
+```
+
 **Açıklama:** Metin işlemleri için kullanılır
 
 ### Gelişmiş Metin Fonksiyonları
@@ -457,6 +704,8 @@ SELECT RAND() FROM tablo_adi;
 **Açıklama:** Matematiksel işlemler için kullanılır
 
 ### Tarih Fonksiyonları
+
+**MySQL:**
 ```sql
 SELECT NOW() FROM tablo_adi;
 SELECT CURDATE() FROM tablo_adi;
@@ -466,6 +715,18 @@ SELECT MONTH(tarih_sutunu) FROM tablo_adi;
 SELECT DAY(tarih_sutunu) FROM tablo_adi;
 SELECT DATE_ADD(tarih, INTERVAL 1 DAY) FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT datetime('now') FROM tablo_adi; -- NOW() yerine
+SELECT date('now') FROM tablo_adi; -- CURDATE() yerine
+SELECT time('now') FROM tablo_adi; -- CURTIME() yerine
+SELECT strftime('%Y', tarih_sutunu) FROM tablo_adi; -- YEAR() yerine
+SELECT strftime('%m', tarih_sutunu) FROM tablo_adi; -- MONTH() yerine
+SELECT strftime('%d', tarih_sutunu) FROM tablo_adi; -- DAY() yerine
+SELECT datetime(tarih, '+1 day') FROM tablo_adi; -- DATE_ADD() yerine
+```
+
 **Açıklama:** Tarih ve saat işlemleri için kullanılır
 
 ### Gelişmiş Tarih Fonksiyonları
@@ -527,6 +788,8 @@ WHERE DAYOFWEEK(siparis_tarihi) IN (1, 7);
 **Açıklama:** Tarih bazlı filtreleme
 
 ### Agregasyon Fonksiyonları
+
+**MySQL:**
 ```sql
 SELECT COUNT(*) FROM tablo_adi;
 SELECT SUM(sutun) FROM tablo_adi;
@@ -534,6 +797,16 @@ SELECT AVG(sutun) FROM tablo_adi;
 SELECT MAX(sutun) FROM tablo_adi;
 SELECT MIN(sutun) FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT COUNT(*) FROM tablo_adi;
+SELECT SUM(sutun) FROM tablo_adi;
+SELECT AVG(sutun) FROM tablo_adi;
+SELECT MAX(sutun) FROM tablo_adi;
+SELECT MIN(sutun) FROM tablo_adi;
+```
+
 **Açıklama:** Veri grupları üzerinde hesaplama yapar
 
 ### Gelişmiş Agregasyon Fonksiyonları
@@ -543,6 +816,10 @@ SELECT COUNT(DISTINCT kategori) FROM urunler;
 
 -- GROUP_CONCAT (MySQL)
 SELECT departman, GROUP_CONCAT(ad SEPARATOR ', ') as calisanlar
+FROM calisanlar GROUP BY departman;
+
+-- GROUP_CONCAT (SQLite)
+SELECT departman, GROUP_CONCAT(ad, ', ') as calisanlar
 FROM calisanlar GROUP BY departman;
 
 -- STRING_AGG (PostgreSQL)
@@ -771,33 +1048,75 @@ WHERE EXISTS (SELECT 1 FROM tablo2 WHERE tablo2.id = tablo1.id);
 ## 10. İndeksler
 
 ### İndeks Oluşturma
+
+**MySQL:**
 ```sql
 CREATE INDEX index_adi ON tablo_adi (sutun_adi);
 ```
+
+**SQLite:**
+```sql
+CREATE INDEX index_adi ON tablo_adi (sutun_adi);
+```
+
 **Açıklama:** Belirtilen sütun için indeks oluşturur
 
 ### Çoklu Sütun İndeksi
+
+**MySQL:**
 ```sql
 CREATE INDEX index_adi ON tablo_adi (sutun1, sutun2);
 ```
+
+**SQLite:**
+```sql
+CREATE INDEX index_adi ON tablo_adi (sutun1, sutun2);
+```
+
 **Açıklama:** Birden fazla sütun için bileşik indeks oluşturur
 
 ### Benzersiz İndeks
+
+**MySQL:**
 ```sql
 CREATE UNIQUE INDEX index_adi ON tablo_adi (sutun_adi);
 ```
+
+**SQLite:**
+```sql
+CREATE UNIQUE INDEX index_adi ON tablo_adi (sutun_adi);
+```
+
 **Açıklama:** Benzersiz değerler için indeks oluşturur
 
 ### İndeks Silme
+
+**MySQL:**
 ```sql
 DROP INDEX index_adi ON tablo_adi;
 ```
+
+**SQLite:**
+```sql
+DROP INDEX index_adi;
+```
+
 **Açıklama:** İndeksi siler
 
 ### İndeksleri Listeleme
+
+**MySQL:**
 ```sql
 SHOW INDEX FROM tablo_adi;
 ```
+
+**SQLite:**
+```sql
+PRAGMA index_list(tablo_adi);
+-- veya
+SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='tablo_adi';
+```
+
 **Açıklama:** Tablodaki tüm indeksleri gösterir
 
 ---
@@ -805,29 +1124,65 @@ SHOW INDEX FROM tablo_adi;
 ## 11. Görünümler (Views)
 
 ### Görünüm Oluşturma
+
+**MySQL:**
 ```sql
 CREATE VIEW view_adi AS 
 SELECT sutun1, sutun2 FROM tablo_adi WHERE kosul;
 ```
+
+**SQLite:**
+```sql
+CREATE VIEW view_adi AS 
+SELECT sutun1, sutun2 FROM tablo_adi WHERE kosul;
+```
+
 **Açıklama:** Sanal tablo oluşturur
 
 ### Görünüm Kullanma
+
+**MySQL:**
 ```sql
 SELECT * FROM view_adi;
 ```
+
+**SQLite:**
+```sql
+SELECT * FROM view_adi;
+```
+
 **Açıklama:** Görünümü normal tablo gibi kullanır
 
 ### Görünüm Güncelleme
+
+**MySQL:**
 ```sql
 CREATE OR REPLACE VIEW view_adi AS 
 SELECT sutun1, sutun2, sutun3 FROM tablo_adi WHERE kosul;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da CREATE OR REPLACE VIEW desteklenmez
+DROP VIEW IF EXISTS view_adi;
+CREATE VIEW view_adi AS 
+SELECT sutun1, sutun2, sutun3 FROM tablo_adi WHERE kosul;
+```
+
 **Açıklama:** Mevcut görünümü günceller
 
 ### Görünüm Silme
+
+**MySQL:**
 ```sql
 DROP VIEW view_adi;
 ```
+
+**SQLite:**
+```sql
+DROP VIEW view_adi;
+```
+
 **Açıklama:** Görünümü siler
 
 ---
@@ -835,6 +1190,8 @@ DROP VIEW view_adi;
 ## 12. Stored Procedures
 
 ### Stored Procedure Oluşturma
+
+**MySQL:**
 ```sql
 DELIMITER //
 CREATE PROCEDURE procedure_adi(IN parametre1 INT, OUT sonuc VARCHAR(50))
@@ -843,19 +1200,45 @@ BEGIN
 END //
 DELIMITER ;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da stored procedure desteklenmez
+-- Bunun yerine fonksiyonlar kullanılabilir
+CREATE TEMP TABLE temp_sonuc (deger TEXT);
+INSERT INTO temp_sonuc SELECT sutun1 FROM tablo_adi WHERE id = ?;
+```
+
 **Açıklama:** Yeniden kullanılabilir kod bloğu oluşturur
 
 ### Stored Procedure Çağırma
+
+**MySQL:**
 ```sql
 CALL procedure_adi(1, @sonuc);
 SELECT @sonuc;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da stored procedure çağırma yoktur
+-- Bunun yerine doğrudan SQL sorguları kullanılır
+```
+
 **Açıklama:** Oluşturulan prosedürü çalıştırır
 
 ### Stored Procedure Silme
+
+**MySQL:**
 ```sql
 DROP PROCEDURE procedure_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da stored procedure yoktur
+```
+
 **Açıklama:** Prosedürü siler
 
 ---
@@ -863,6 +1246,8 @@ DROP PROCEDURE procedure_adi;
 ## 13. Triggers
 
 ### Trigger Oluşturma
+
+**MySQL:**
 ```sql
 DELIMITER //
 CREATE TRIGGER trigger_adi 
@@ -873,9 +1258,22 @@ BEGIN
 END //
 DELIMITER ;
 ```
+
+**SQLite:**
+```sql
+CREATE TRIGGER trigger_adi 
+BEFORE INSERT ON tablo_adi
+FOR EACH ROW
+BEGIN
+    UPDATE tablo_adi SET otomatik_alan = datetime('now') WHERE id = NEW.id;
+END;
+```
+
 **Açıklama:** Belirli olaylarda otomatik çalışan kod bloğu oluşturur
 
 ### Trigger Türleri
+
+**MySQL ve SQLite:**
 - **BEFORE INSERT:** Ekleme öncesi
 - **AFTER INSERT:** Ekleme sonrası
 - **BEFORE UPDATE:** Güncelleme öncesi
@@ -884,9 +1282,17 @@ DELIMITER ;
 - **AFTER DELETE:** Silme sonrası
 
 ### Trigger Silme
+
+**MySQL:**
 ```sql
 DROP TRIGGER trigger_adi;
 ```
+
+**SQLite:**
+```sql
+DROP TRIGGER trigger_adi;
+```
+
 **Açıklama:** Trigger'ı siler
 
 ---
@@ -939,73 +1345,169 @@ ROLLBACK TO nokta_adi;
 ## 15. Kullanıcı ve İzin Yönetimi
 
 ### Kullanıcı Oluşturma
+
+**MySQL:**
 ```sql
 CREATE USER 'kullanici_adi'@'localhost' IDENTIFIED BY 'sifre';
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da kullanıcı yönetimi yoktur
+-- Dosya izinleri ile kontrol edilir
+```
+
 **Açıklama:** Yeni kullanıcı oluşturur
 
 ### Kullanıcıya İzin Verme
+
+**MySQL:**
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE ON veritabani_adi.* TO 'kullanici_adi'@'localhost';
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da izin sistemi yoktur
+-- Dosya sistemi izinleri kullanılır
+```
+
 **Açıklama:** Kullanıcıya belirli izinler verir
 
 ### Tüm İzinleri Verme
+
+**MySQL:**
 ```sql
 GRANT ALL PRIVILEGES ON veritabani_adi.* TO 'kullanici_adi'@'localhost';
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da izin sistemi yoktur
+```
+
 **Açıklama:** Kullanıcıya tüm izinleri verir
 
 ### İzinleri Geri Alma
+
+**MySQL:**
 ```sql
 REVOKE SELECT ON veritabani_adi.* FROM 'kullanici_adi'@'localhost';
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da izin sistemi yoktur
+```
+
 **Açıklama:** Kullanıcının belirli izinlerini geri alır
 
 ### İzinleri Uygulama
+
+**MySQL:**
 ```sql
 FLUSH PRIVILEGES;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da izin sistemi yoktur
+```
+
 **Açıklama:** İzin değişikliklerini aktif hale getirir
 
 ### Kullanıcı Silme
+
+**MySQL:**
 ```sql
 DROP USER 'kullanici_adi'@'localhost';
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da kullanıcı yönetimi yoktur
+```
+
 **Açıklama:** Kullanıcıyı siler
 
 ---
 
 ## 16. Veritabanı Yedekleme ve Geri Yükleme
 
-### Veritabanı Yedekleme (mysqldump)
+### Veritabanı Yedekleme
+
+**MySQL:**
 ```bash
 mysqldump -u kullanici_adi -p veritabani_adi > yedek.sql
 ```
+
+**SQLite:**
+```bash
+# Dosyayı kopyalamak yeterlidir
+cp veritabani.db yedek.db
+# veya
+sqlite3 veritabani.db ".backup yedek.db"
+```
+
 **Açıklama:** Veritabanını SQL dosyasına yedekler
 
 ### Veritabanı Geri Yükleme
+
+**MySQL:**
 ```bash
 mysql -u kullanici_adi -p veritabani_adi < yedek.sql
 ```
+
+**SQLite:**
+```bash
+# Dosyayı geri yüklemek
+cp yedek.db veritabani.db
+# veya SQL formatında
+sqlite3 veritabani.db < yedek.sql
+```
+
 **Açıklama:** SQL dosyasından veritabanını geri yükler
 
 ### Tablo Yedekleme
+
+**MySQL:**
 ```bash
 mysqldump -u kullanici_adi -p veritabani_adi tablo_adi > tablo_yedek.sql
 ```
+
+**SQLite:**
+```bash
+sqlite3 veritabani.db ".dump tablo_adi" > tablo_yedek.sql
+```
+
 **Açıklama:** Belirli tabloyu yedekler
 
 ### Sadece Veri Yapısı Yedekleme
+
+**MySQL:**
 ```bash
 mysqldump -u kullanici_adi -p --no-data veritabani_adi > yapi_yedek.sql
 ```
+
+**SQLite:**
+```bash
+sqlite3 veritabani.db ".schema tablo_adi" > yapi_yedek.sql
+```
+
 **Açıklama:** Sadece tablo yapılarını yedekler
 
 ### Sadece Veri Yedekleme
+
+**MySQL:**
 ```bash
 mysqldump -u kullanici_adi -p --no-create-info veritabani_adi > veri_yedek.sql
 ```
+
+**SQLite:**
+```bash
+sqlite3 veritabani.db "SELECT * FROM tablo_adi;" > veri_yedek.sql
+```
+
 **Açıklama:** Sadece verileri yedekler
 
 ---
@@ -1013,9 +1515,17 @@ mysqldump -u kullanici_adi -p --no-create-info veritabani_adi > veri_yedek.sql
 ## 17. Performans Optimizasyonu
 
 ### Sorgu Analizi
+
+**MySQL:**
 ```sql
 EXPLAIN SELECT * FROM tablo_adi WHERE sutun = 'deger';
 ```
+
+**SQLite:**
+```sql
+EXPLAIN QUERY PLAN SELECT * FROM tablo_adi WHERE sutun = 'deger';
+```
+
 **Açıklama:** Sorgunun nasıl çalıştığını gösterir
 
 ### Sorgu Optimizasyonu İpuçları:
@@ -1027,15 +1537,36 @@ EXPLAIN SELECT * FROM tablo_adi WHERE sutun = 'deger';
 6. GROUP BY'da indeksli sütunlar kullanın
 
 ### Tablo Analizi
+
+**MySQL:**
 ```sql
 ANALYZE TABLE tablo_adi;
 ```
+
+**SQLite:**
+```sql
+ANALYZE tablo_adi;
+-- veya tüm tablolar için
+ANALYZE;
+```
+
 **Açıklama:** Tablo istatistiklerini günceller
 
 ### Tablo Optimizasyonu
+
+**MySQL:**
 ```sql
 OPTIMIZE TABLE tablo_adi;
 ```
+
+**SQLite:**
+```sql
+-- SQLite'da VACUUM kullanılır
+VACUUM;
+-- veya belirli tablo için
+VACUUM tablo_adi;
+```
+
 **Açıklama:** Tabloyu optimize eder
 
 ---
@@ -1065,6 +1596,8 @@ OPTIMIZE TABLE tablo_adi;
 ## 19. Veri Tipleri
 
 ### Sayısal Tipler
+
+**MySQL:**
 - **INT, INTEGER:** Tam sayı (-2147483648 to 2147483647)
 - **BIGINT:** Büyük tam sayı
 - **SMALLINT:** Küçük tam sayı
@@ -1073,30 +1606,61 @@ OPTIMIZE TABLE tablo_adi;
 - **FLOAT:** Kayan noktalı sayı
 - **DOUBLE:** Çift hassasiyetli kayan noktalı sayı
 
+**SQLite:**
+- **INTEGER:** Tam sayı (8 byte)
+- **REAL:** Kayan noktalı sayı (8 byte)
+- **NUMERIC:** Ondalıklı sayı
+
 ### Metin Tipleri
+
+**MySQL:**
 - **VARCHAR(255):** Değişken uzunlukta metin (max 255 karakter)
 - **CHAR(10):** Sabit uzunlukta metin (10 karakter)
 - **TEXT:** Uzun metin
 - **LONGTEXT:** Çok uzun metin
 - **TINYTEXT:** Kısa metin
 
+**SQLite:**
+- **TEXT:** Metin (sınırsız uzunluk)
+- **VARCHAR(n):** Metin (n karakter)
+- **CHAR(n):** Sabit uzunlukta metin (n karakter)
+
 ### Tarih ve Saat Tipleri
+
+**MySQL:**
 - **DATE:** Tarih (YYYY-MM-DD)
 - **TIME:** Saat (HH:MM:SS)
 - **DATETIME:** Tarih ve saat (YYYY-MM-DD HH:MM:SS)
 - **TIMESTAMP:** Zaman damgası
 - **YEAR:** Yıl
 
+**SQLite:**
+- **DATETIME:** Tarih ve saat
+- **DATE:** Tarih
+- **TIME:** Saat
+- **TIMESTAMP:** Zaman damgası
+
 ### Binary Tipler
+
+**MySQL:**
 - **BLOB:** Binary large object
 - **LONGBLOB:** Uzun binary veri
 - **VARBINARY(255):** Değişken uzunlukta binary veri
 
+**SQLite:**
+- **BLOB:** Binary large object
+
 ### Diğer Tipler
+
+**MySQL:**
 - **BOOLEAN, BOOL:** Mantıksal değer (TRUE/FALSE)
 - **ENUM('a','b','c'):** Numaralandırma
 - **SET('a','b','c'):** Çoklu seçim kümesi
 - **JSON:** JSON veri tipi
+
+**SQLite:**
+- **BOOLEAN:** Mantıksal değer (0/1)
+- **JSON:** JSON veri tipi (SQLite 3.38+)
 
 ---
 
@@ -1233,6 +1797,8 @@ CREATE TABLE calisanlar (
 ## Faydalı Komutlar
 
 ### Sistem Bilgileri
+
+**MySQL:**
 ```sql
 -- MySQL versiyonu
 SELECT VERSION();
@@ -1250,7 +1816,27 @@ SHOW STATUS;
 SHOW PROCESSLIST;
 ```
 
+**SQLite:**
+```sql
+-- SQLite versiyonu
+SELECT sqlite_version();
+
+-- Mevcut kullanıcı (yoktur)
+-- SQLite'da kullanıcı sistemi yoktur
+
+-- Mevcut veritabanı
+PRAGMA database_list;
+
+-- Sunucu durumu
+PRAGMA integrity_check;
+
+-- Süreç listesi (yoktur)
+-- SQLite tek kullanıcılıdır
+```
+
 ### Tablo Bilgileri
+
+**MySQL:**
 ```sql
 -- Tablo boyutu
 SELECT 
@@ -1265,6 +1851,23 @@ SELECT
     table_rows
 FROM information_schema.tables 
 WHERE table_schema = 'veritabani_adi';
+```
+
+**SQLite:**
+```sql
+-- Tablo boyutu (yaklaşık)
+SELECT 
+    name as table_name,
+    ROUND((length * 1.0 / 1024 / 1024), 2) AS 'Boyut (MB)'
+FROM sqlite_master 
+WHERE type='table';
+
+-- Tablo satır sayısı
+SELECT 
+    name as table_name,
+    (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=table_name) as row_count
+FROM sqlite_master 
+WHERE type='table';
 ```
 
 ---
@@ -3830,8 +4433,38 @@ FROM transactions, stats;
 
 Bu kapsamlı SQL cheatsheet, SQL'in tüm temel ve ileri seviye konularını ele almaktadır. Her komutun Türkçe açıklaması ile birlikte pratik örnekler verilmiştir. Bu rehberi referans olarak kullanarak SQL sorgularınızı daha etkili bir şekilde yazabilir ve veritabanı yönetimi konusunda uzmanlaşabilirsiniz.
 
+## MySQL vs SQLite Önemli Farklar
+
+### Veritabanı Yönetimi
+- **MySQL:** Çoklu veritabanı desteği, kullanıcı yönetimi, izin sistemi
+- **SQLite:** Tek dosya, kullanıcı yönetimi yok, dosya izinleri ile kontrol
+
+### Veri Tipleri
+- **MySQL:** Çok sayıda veri tipi (VARCHAR, CHAR, TEXT, LONGTEXT, vb.)
+- **SQLite:** Sadece 5 temel tip (NULL, INTEGER, REAL, TEXT, BLOB)
+
+### Sütun İşlemleri
+- **MySQL:** ALTER TABLE ile sütun ekleme, silme, değiştirme
+- **SQLite:** Sadece sütun ekleme, silme ve değiştirme için yeni tablo oluşturma gerekir
+
+### Stored Procedures
+- **MySQL:** Tam destek
+- **SQLite:** Desteklenmez
+
+### Fonksiyonlar
+- **MySQL:** Zengin fonksiyon kütüphanesi
+- **SQLite:** Temel fonksiyonlar, bazı farklı isimler (SUBSTR vs SUBSTRING)
+
+### Yedekleme
+- **MySQL:** mysqldump ile SQL formatında
+- **SQLite:** Dosya kopyalama veya .dump komutu
+
+### Performans
+- **MySQL:** Çok kullanıcılı, yüksek performans
+- **SQLite:** Tek kullanıcılı, embedded kullanım için optimize
+
 **Not:** Bu rehber genel SQL standartlarını takip etmekle birlikte, bazı özellikler belirli veritabanı sistemlerine özgü olabilir. Kullandığınız veritabanı sisteminin dokümantasyonunu kontrol etmeyi unutmayın.
 
 ---
 
-**SQL Cheatsheet** - SQL'in tüm özelliklerini kapsayan eksiksiz referans rehberi! 🚀
+**SQL Cheatsheet** - MySQL ve SQLite komutları ile SQL'in tüm özelliklerini kapsayan eksiksiz referans rehberi! 🚀
