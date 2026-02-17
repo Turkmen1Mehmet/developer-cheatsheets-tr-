@@ -18,6 +18,15 @@ Python programlama dili için detaylı referans:
 - **Standart Kütüphaneler**: os, datetime, json, re
 - **Best Practices**: Kod yazım standartları
 
+### 📖 Python Eğitim Kılavuzu
+Sıfırdan ileri seviyeye kapsamlı Python eğitim dökümanı:
+- **Temel Python**: Kurulum, veri tipleri, fonksiyonlar, OOP
+- **İleri Konular**: Decorator, generator, async/await, type hints
+- **Veri Bilimi**: Pandas, Scikit-learn, zaman serileri, ML pipeline
+- **Büyük Veri**: Spark, Hadoop, Hive, Kafka
+- **LLM & AI**: Prompt engineering, RAG, LangChain, agent mimarileri
+- **MLOps & Araçlar**: Airflow, MLflow, Streamlit, test ve güvenlik
+
 ### 🐳 Docker Cheatsheet
 Container teknolojisi için kapsamlı rehber:
 - **Temel Komutlar**: Image ve container yönetimi
@@ -57,7 +66,7 @@ Veri analizi ve hesaplama için kapsamlı rehber:
 
 - ✅ **Türkçe Açıklamalar**: Her komutun detaylı açıklaması
 - ✅ **Pratik Örnekler**: Gerçek dünya senaryoları
-- ✅ **Kapsamlı İçerik**: 5 farklı teknoloji alanı
+- ✅ **Kapsamlı İçerik**: Çoklu teknoloji alanı + kapsamlı Python eğitim dökümanı
 - ✅ **Kolay Kullanım**: Hızlı referans için tasarlandı
 - ✅ **Güncel İçerik**: En son teknoloji trendleri
 
