@@ -40,11 +40,24 @@ Veri analizi ve hesaplama için kapsamlı rehber:
 - **Makrolar**: Otomatik işlemler ve VBA
 - **Klavye Kısayolları**: Hızlı çalışma teknikleri
 
+### 📈 PowerBI Cheatsheet
+İş zekası ve veri görselleştirme için kapsamlı rehber:
+- **Veri Yükleme**: Excel, SQL Server, Web kaynakları
+- **Veri Modelleme**: İlişkiler, hesaplanmış sütunlar
+- **DAX Formülleri**: Hesaplamalar ve analiz fonksiyonları
+- **Görselleştirme**: Grafikler, dashboard'lar, raporlar
+- **PowerBI Service**: Paylaşım, güvenlik, performans
+- **PowerBI Premium**: Gelişmiş özellikler ve AI
+- **PowerBI Mobile**: Mobil uygulama ve özellikler
+- **PowerBI Gateway**: Şirket içi veri bağlantıları
+- **PowerBI REST API**: Otomasyon ve entegrasyon
+- **Best Practices**: Optimizasyon ve troubleshooting
+
 ## 🎯 Özellikler
 
 - ✅ **Türkçe Açıklamalar**: Her komutun detaylı açıklaması
 - ✅ **Pratik Örnekler**: Gerçek dünya senaryoları
-- ✅ **Kapsamlı İçerik**: 4 farklı teknoloji alanı
+- ✅ **Kapsamlı İçerik**: 5 farklı teknoloji alanı
 - ✅ **Kolay Kullanım**: Hızlı referans için tasarlandı
 - ✅ **Güncel İçerik**: En son teknoloji trendleri
 
