@@ -62,6 +62,26 @@ Veri analizi ve hesaplama için kapsamlı rehber:
 - **PowerBI REST API**: Otomasyon ve entegrasyon
 - **Best Practices**: Optimizasyon ve troubleshooting
 
+### ☁️ Azure Cheatsheet
+Microsoft Azure ve Python entegrasyonu için kapsamlı rehber:
+- **Azure CLI**: Kurulum, `az login`, token alma (`get-access-token`)
+- **Azure SQL**: Python ile bağlantı (pyodbc, SQLAlchemy), Microsoft Entra token
+- **Veri Yazma**: Pandas `to_sql`, Excel/CSV'dan yükleme, 2100 parametre limiti
+- **Veri Okuma**: `read_sql`, sistem görünümleri (katman, kaynak kullanımı)
+- **Güvenlik**: Firewall, ortam değişkenleri, best practices
+- **Tam Örnek**: Excel'den Azure SQL'e pipeline (chunk, normalizasyon)
+
+### 🌐 HTML Cheatsheet
+Web sayfası yapısı ve HTML5 için kapsamlı rehber:
+- **Temel Yapı**: DOCTYPE, öğeler, nitelikler, başlıklar, paragraflar, biçimlendirme
+- **Stiller ve CSS**: Renkler, inline stil, dosya yolları
+- **Bağlantılar, Görseller, Favicon**: Linkler, img, favicon
+- **Tablolar ve Listeler**: table, ul/ol/dl, form öğeleri
+- **Formlar**: Form nitelikleri, input türleri, input form niteliği (form dışı alanlar)
+- **Medya ve Grafik**: Canvas, SVG, video, audio, YouTube
+- **Web API'leri**: Geolocation, Drag & Drop, Web Storage, Workers, SSE
+- **Referans**: Etiket listesi, global nitelikler, olaylar, erişilebilirlik
+
 ## 🎯 Özellikler
 
 - ✅ **Türkçe Açıklamalar**: Her komutun detaylı açıklaması
